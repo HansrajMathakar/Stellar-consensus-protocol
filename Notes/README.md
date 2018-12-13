@@ -36,74 +36,74 @@ During system startup or when an existing leader fails reported by either its ow
 A client that gets no response from the leader for a predefined time-out interval suspects a failure and initiates leader election.  
 
 **Raft Noval features**
-Strong Leader
-Log entries only flow from the leader to other servers.
-Easier management of the replicated log.
+Strong Leader  
+Log entries only flow from the leader to other servers.  
+Easier management of the replicated log.  
 
-Leader Election
-Raft uses randomized timers to elect leaders.
-Likewise to other algorithms, heartbeat is required.
+Leader Election  
+Raft uses randomized timers to elect leaders.  
+Likewise to other algorithms, heartbeat is required.  
 
-Membership Changes
-Raft uses joint consensus approach where the majorities of two different configurations overlap during transitions.
-This allows the cluster to continue operation normally during configuration changes.
+Membership Changes  
+Raft uses joint consensus approach where the majorities of two different configurations overlap during transitions.  
+This allows the cluster to continue operation normally during configuration changes.  
 
 **Three roles**  
-The Leader
-The Follower
-The Candidate
+The Leader  
+The Follower  
+The Candidate  
 
 
-At any given time each server is in one of the above three states.
-In a normal operation, there is exactly one leader!
+At any given time each server is in one of the above three states.  
+In a normal operation, there is exactly one leader!  
 
-The candidate will request for vote from the other nodes
-The other nodes will check their log and if it matches the requesting node's log they cast their vote. 
-If the node gets majority votes it becomes the leader
-The leader will replicate the logs 
-Checks heartbeats of other nodes
-When the leader dies the other nodes will have arbitrary timeouts. The node which finishes its timeout will nominate itself as a leader and requests for votes
+The candidate will request for vote from the other nodes  
+The other nodes will check their log and if it matches the requesting node's log they cast their vote.   
+If the node gets majority votes it becomes the leader  
+The leader will replicate the logs   
+Checks heartbeats of other nodes  
+When the leader dies the other nodes will have arbitrary timeouts. The node which finishes its timeout will nominate itself as a leader and requests for votes  
 
 
 **Non Consensus approach**
-Consistency as Logical Monotonicity
+Consistency as Logical Monotonicity  
 
 Monotonicity: 
-If a block of code satisfies a simple property: adding things to the input can only increase the output.
+If a block of code satisfies a simple property: adding things to the input can only increase the output.  
 
-Non Monotonic:
-A block of code may need to “retract” a previous output if more is added to its input.
-logically monotonic distributed code is eventually consistent without any need for coordination protocols (distributed locks, two-phase commit, paxos, raft, etc.) meaning non-consensus.
-eventual consistency can be guaranteed in any program by protecting non-monotonic statements with coordination protocols.
+Non Monotonic:  
+A block of code may need to “retract” a previous output if more is added to its input.  
+logically monotonic distributed code is eventually consistent without any need for coordination protocols (distributed locks, two-phase commit, paxos, raft, etc.) meaning non-consensus.  
+eventual consistency can be guaranteed in any program by protecting non-monotonic statements with coordination protocols.  
 
-Consistency without consensus = CRDT
+Consistency without consensus = CRDT  
 
-**Advantages of shared memory**
-Implicit communication
-Low overhead when cached
+**Advantages of shared memory**  
+Implicit communication  
+Low overhead when cached  
 
 **Adv of MQ**
-Explicit communication (send/receive)
-Easier to control data placement
+Explicit communication (send/receive)  
+Easier to control data placement  
 
-**Disadv of SM**  
-Complex to build scalable system
-Requires synchronization
-Hard to control data placement within caching system
+**Disadv of SM**    
+Complex to build scalable system  
+Requires synchronization  
+Hard to control data placement within caching system  
 
 **Disadv of MQ**  
-Message passing overhead can be quite high.
-More complex to program
-Introduces question of reception technique (interrupts/polling)
+Message passing overhead can be quite high.  
+More complex to program  
+Introduces question of reception technique (interrupts/polling)  
 
 **SPMD**  
-Single Program Multiple Data: the same program runs against multiple data on each processor or node.
-Initialize
-Split data correctly and evenly
-Run the same program
-Combine the results
-Finalize
-Not supported for dynamic load balancing
+Single Program Multiple Data: the same program runs against multiple data on each processor or node.  
+Initialize  
+Split data correctly and evenly  
+Run the same program  
+Combine the results  
+Finalize  
+Not supported for dynamic load balancing  
 
 **Master worker**  
  Particularly relevant for problems using task  parallelism pattern where task have no dependencies
@@ -112,7 +112,7 @@ Not supported for dynamic load balancing
 
 Future can be used to load lengthy computation that can be started before the results are needed.
 
-How to choose a design pattern that facilitates the mapping of tasks to units of execution?
+How to choose a design pattern that facilitates the mapping of tasks to units of execution?  
 
 1. Organize by tasks
 2. Organize by data decomposition
