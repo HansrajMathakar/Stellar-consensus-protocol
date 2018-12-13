@@ -1,4 +1,4 @@
-# Replication
+**Replication**
 
 **Leader election**
 1. Two servers play “master” and “slave” roles.
@@ -125,7 +125,7 @@ n = the number of processor
 
 Speedup =   old running time/new running time
 
-#### 3 keys to parallel performance
+**3 keys to parallel performance**
 Coverage of parallelism in algorithm
 Amdahl’s Law
 Granularity of partitioning among CPUs.
@@ -133,6 +133,7 @@ Communication cost and load balancing
 Locality of computation and communication
 Communication between CPUs or between CPUs and their memories.
 
+**Performance considerations**
 For computation-intensive (CPU-bound) tasks that do no I/O and access no shared data, 
 Ncpu or Ncpu + 1 threads  optimal throughput 
 More threads can degrade performance as the threads compete for CPU and memory resources.
