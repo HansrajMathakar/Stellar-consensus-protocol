@@ -1,35 +1,41 @@
 # Replication
 
+**Leader election**
 1. Two servers play “master” and “slave” roles.
 Clients send operations (both READ and WRITE) to Leader.
-Leader forwards WIRTE operations to one or more followers.
+Leader forwards WRiTE operations to one or more followers.
 Finally, leader replies to client.
 
-Non-deterministic operations.
-No network partition—if leader cannot reach to followers, then the data will be inconsistent.
-State transfer between leader and followers.
-How to bring up a new follower after existing follower becomes leader.
+**Challenges**
+Non-deterministic operations.  
+No network partition—if leader cannot reach to followers, then the data will be inconsistent.  
+State transfer between leader and followers.  
+How to bring up a new follower after existing follower becomes leader.  
 
-
+**Quorum concensus algorithm**
 A distributed system is a set of processes working together to form a complete system.
 Sometimes, it’s important that some processes agree on a result or a change of state before it’s actually reflected by the system.
 Quorum represents the number of participants required to agree on a result before it can be applied.
 
-Raft alogorithm
-leader election
-log replication
-safety
+**Raft alogorithm**
+leader election  
+log replication  
+safety  
 
-The process of choosing a leader from a pool of machines.
-Leader election is the process of determining a process as the manager of some task distributed among several processes 
+**How to choose a leader**
+The process of choosing a leader from a pool of machines.  
+Leader election is the process of determining a process as the manager of some task distributed among several processes   
 
-Centralized control simplifies data and task synchronization.
-It is a single point of failure, but solution is to choose a new leader upon failure.
-Many algorithms for leader election.
+**Why leader**
+Centralized control simplifies data and task synchronization.  
+It is a single point of failure, but solution is to choose a new leader upon failure.  
+Many algorithms for leader election.  
 
-During system startup or when an existing leader fails reported by either its own heartbeat or its clients.
-A client that gets no response from the leader for a predefined time-out interval suspects a failure and initiates leader election.
+**when leader election**
+During system startup or when an existing leader fails reported by either its own heartbeat or its clients.  
+A client that gets no response from the leader for a predefined time-out interval suspects a failure and initiates leader election.  
 
+**Raft Noval features**
 Strong Leader
 Log entries only flow from the leader to other servers.
 Easier management of the replicated log.
@@ -42,11 +48,13 @@ Membership Changes
 Raft uses joint consensus approach where the majorities of two different configurations overlap during transitions.
 This allows the cluster to continue operation normally during configuration changes.
 
+**Three roles**  
 The Leader
 The Follower
 The Candidate
 
-At any given time each serer is in one of the above three states.
+
+At any given time each server is in one of the above three states.
 In a normal operation, there is exactly one leader!
 
 The candidate will request for vote from the other nodes
@@ -57,7 +65,7 @@ Checks heartbeats of other nodes
 When the leader dies the other nodes will have arbitrary timeouts. The node which finishes its timeout will nominate itself as a leader and requests for votes
 
 
-## None Consensus approach
+**Non Consensus approach**
 Consistency as Logical Monotonicity
 
 Monotonicity: 
@@ -70,23 +78,25 @@ eventual consistency can be guaranteed in any program by protecting non-monotoni
 
 Consistency without consensus = CRDT
 
-#### Advantages of shared memory
+**Advantages of shared memory**
 Implicit communication
 Low overhead when cached
-#### Adv of MQ
+
+**Adv of MQ**
 Explicit communication (send/receive)
 Easier to control data placement
-#### Disadv of SM
+
+**Disadv of SM**  
 Complex to build scalable system
 Requires synchronization
 Hard to control data placement within caching system
 
-#### Disadv of MQ
+**Disadv of MQ**  
 Message passing overhead can be quite high.
 More complex to program
 Introduces question of reception technique (interrupts/polling)
 
-#### SPMD
+**SPMD**  
 Single Program Multiple Data: the same program runs against multiple data on each processor or node.
 Initialize
 Split data correctly and evenly
@@ -95,7 +105,7 @@ Combine the results
 Finalize
 Not supported for dynamic load balancing
 
-#### Master worker 
+**Master worker**  
  Particularly relevant for problems using task  parallelism pattern where task have no dependencies
  Embarrassingly parallel problems
  Main challenge is determining when the entire problem is complete 
@@ -146,17 +156,17 @@ What hidden costs—safety, increased development or maintenance risk– are you
 
 
 
-Anti-entropy
+**Anti-entropy**
 Each Node “n” periodically contacts a random peer “p” selected from the pool.
 Then, n-p engages in an information exchange protocol: n to p (push), n from p (pull), or both push-pull.
 
-Rumor mongering
+**Rumor mongering**
 Nodes are initially ignorant.
 When an update is received by a node, it becomes a hot rumor.
 While a node holds a hot rumor, it periodically chooses a random peer from the pool and sends (push) the rumor to it.
 Eventually, a node will lose interest in spreading the rumor.
 
-Gossip protocol
+**Gossip protocol**
 Each node in the system periodically exchanges information with a subset of nodes selected randomly.
 Complete membership table is unrealistic in a large scale dynamic cluster.
 Instead, each node maintains a small local membership table that provides a partial view on the complete set of nodes.
