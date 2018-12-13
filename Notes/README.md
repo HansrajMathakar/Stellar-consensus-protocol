@@ -147,13 +147,6 @@ Locality
 Zero, regular, irregular communications among tasks
 
 
-What do you mean by “faster”?
-Under what conditions will this approach actually be faster? 
-Under light/heavy load? 
-With large/small data sets?
-How often are these conditions likely to arise in your situation? 
-Is this code likely to be used in other situations where the conditions may be different? Average-case time or worst-case time?
-What hidden costs—safety, increased development or maintenance risk– are you trading for this improved performance? Is this a good tradeoff?
 
 
 
