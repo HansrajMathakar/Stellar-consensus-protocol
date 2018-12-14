@@ -9,10 +9,8 @@ from twisted.internet import reactor
 HOST = '127.0.0.1'
 
 
-class FBATransaction:
-    INIT = "init"
-    COMMIT = "commit"
-    VOTE = "vote"
+class FBA_Message:
+    
 
     def __init__(self, key, value, type=None):
         #self.id = id
@@ -35,14 +33,14 @@ transactions = [
 
 
 
-class FBAClientV1(DatagramProtocol):
+class FBAClient(DatagramProtocol):
     def __init__(self, port):
         self.port = port
         
         self.history = list()
         self.id = 0
 
-    def send_next(self, c_port):
+    def send_next(self, port):
         print('Message sent to server')
         if self.id >= len(transactions):
             return
@@ -52,22 +50,22 @@ class FBAClientV1(DatagramProtocol):
 
         key, value = m.split(':')
         
-        t = FBATransaction(key, value, type='init')
+        t = FBA_Message(key, value, type='init')
         data = t.__dict__
 
         self.id += 1
-        self.send_msg(c_port, data)
+        self.start_messagethread(port, data)
 
-    def send_msg(self, c_port, s_json):
-        t = threading.Thread(target=self._send_msg, args=(c_port, s_json,))
+    def start_messagethread(self, port, json_msg):
+        t = threading.Thread(target=self.sending_msg, args=(port, json_msg,))
         t.start()
 
-    def _send_msg(self, c_port, s_json):
-       # self.transport.connect(HOST, c_port)
-        data = json.dumps(s_json).encode()
-        self.transport.write(data, (HOST, c_port))
+    def sending_msg(self, port, json_msg):
+       # self.transport.connect(HOST, port)
+        data = json.dumps(json_msg).encode()
+        self.transport.write(data, (HOST, port))
 
-    def mainloop(self):
+    def listen(self):
         reactor.listenUDP(self.port, self)
 
     def startProtocol(self):
@@ -75,12 +73,12 @@ class FBAClientV1(DatagramProtocol):
 
     def datagramReceived(self, data, host):
         print("received %r from %s" % (data, host))
-        self.send_next(c_port=3000)
+        self.send_next(port=3000)
 
 if __name__ == '__main__':
-    c = FBAClientV1(port=3005) 
-    c.mainloop()
+    client = FBAClient(port=3005) 
+    client.listen()
 
-    c.send_next(3000)
+    client.send_next(3000)
     reactor.run()
     
